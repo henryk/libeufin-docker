@@ -29,5 +29,6 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$IMAGE_VERSION" == "main" ] && IMAGE_VERSION=latest
           export IMAGE_VERSION
-          docker compose build
-          docker compose push
+          echo IMAGE_VERSION=$IMAGE_VERSION
+          IMAGE_VERSION="${IMAGE_VERSION}" docker compose build
+          IMAGE_VERSION="${IMAGE_VERSION}" docker compose push
