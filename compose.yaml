@@ -8,7 +8,7 @@ x-db-default: &db-default
 
 services:
   nexus:
-    image: nexus:latest
+    image: ${DOCKER_REGISTRY}nexus:${IMAGE_VERSION}
     build:
       context: .
       target: nexus
@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: eufin_nexus
 
   sandbox: &sandbox
-    image: sandbox:latest
+    image: ${DOCKER_REGISTRY}sandbox:${IMAGE_VERSION}
     build:
       context: .
       target: sandbox
