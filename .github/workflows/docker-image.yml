@@ -22,16 +22,12 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-          IMAGE_BASE=ghcr.io/${{ github.repository }}
-          # Change all uppercase to lowercase
-          IMAGE_BASE=$(echo $IMAGE_BASE | tr '[A-Z]' '[a-z]')
           # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          IMAGE_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_VERSION=$(echo $IMAGE_VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
-          docker build . --target nexus -t $IMAGE_BASE/nexus:$VERSION
-          docker build . --target sandbox -t $IMAGE_BASE/sandbox:$VERSION
-          docker push $IMAGE_BASE/nexus:$VERSION
-          docker push $IMAGE_BASE/sandbox:$VERSION
+          [ "$IMAGE_VERSION" == "main" ] && IMAGE_VERSION=latest
+          export IMAGE_VERSION
+          docker compose build
+          docker compose push
