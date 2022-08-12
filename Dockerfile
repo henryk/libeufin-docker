@@ -1,4 +1,7 @@
-FROM debian:11-slim as common-base
+ARG DEBIAN_BASE_VERSION=11-slim
+ARG LIBEUFIN_COMMIT=e9513cdd2c98b8329b31df4c50aa0efd84c0cf63
+
+FROM debian:${DEBIAN_BASE_VERSION} as common-base
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
@@ -17,12 +20,19 @@ RUN apt-get update && \
 
 FROM builder-base as builder
 
-RUN mkdir /src /app
-WORKDIR /src
-RUN git clone git://git.taler.net/libeufin
-COPY *.patch .
+RUN mkdir -p /src/libeufin /app
+COPY *.patch /src/
 WORKDIR /src/libeufin
+
+ARG LIBEUFIN_COMMIT
+ENV LIBEUFIN_COMMIT=${LIBEUFIN_COMMIT}
+RUN git init &&  \
+    git remote add origin git://git.taler.net/libeufin && \
+    git fetch origin ${LIBEUFIN_COMMIT} && \
+    git reset --hard FETCH_HEAD
+
 RUN for i in ../*.patch; do patch -p1 < "$i"; done
+
 RUN ./bootstrap
 RUN ./configure --prefix=/app
 RUN make assemble
