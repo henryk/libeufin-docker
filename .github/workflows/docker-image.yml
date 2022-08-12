@@ -19,8 +19,10 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - uses: actions/checkout@v3
-    - name: Build the Docker image
+    - name: Build and push the Docker image
       run: |
           # Strip git ref prefix from version
           IMAGE_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
