@@ -34,11 +34,43 @@ services:
       POSTGRES_USER: eufin_nexus
       POSTGRES_PASSWORD: eufin_nexus
 
+  sandbox: &sandbox
+    image: sandbox:latest
+    build:
+      context: .
+      target: sandbox
+    restart: always
+    read_only: true
+    environment:
+      LIBEUFIN_SANDBOX_DB_CONNECTION: "jdbc:postgresql://db-sandbox:5432/eufin_sandbox?user=eufin_sandbox&password=eufin_sandbox"
+      LIBEUFIN_SANDBOX_ADMIN_PASSWORD: hunter2
+    ports:
+      - "5002:5002"
+    networks:
+      db-sandbox: {}
+      default: {}
+    depends_on:
+      - db-sandbox
+
+  db-sandbox:
+    <<: *db-default
+    volumes:
+      - db-sandbox_data:/var/lib/postgresql/data
+    networks:
+      db-sandbox: {}
+    environment:
+      POSTGRES_USER: eufin_sandbox
+      POSTGRES_PASSWORD: eufin_sandbox
+
 networks:
   db-nexus:
+    internal: true
+    driver: bridge
+  db-sandbox:
     internal: true
     driver: bridge
   default:
 
 volumes:
   db-nexus_data:
+  db-sandbox_data:

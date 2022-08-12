@@ -5,6 +5,8 @@ RUN apt-get update && \
         openjdk-11-jre python3 python3-click python3-requests && \
     rm -rf /var/lib/apt/lists/*
 
+ENV PATH=/app/bin:${PATH}
+
 FROM common-base as builder-base
 
 RUN apt-get update && \
@@ -32,15 +34,16 @@ FROM builder as builder-sandbox
 RUN make install-sandbox install-cli
 
 FROM common-base as sandbox
+COPY sandbox-entrypoint.sh /
 COPY --from=builder-sandbox /app /app
 
-ENV PATH=/app/bin:${PATH}
+EXPOSE 5002
+ENTRYPOINT ["/sandbox-entrypoint.sh"]
+CMD ["serve", "--port", "5002"]
 
 FROM common-base as nexus
 COPY --from=builder-nexus /app /app
 
 EXPOSE 5001
-ENV PATH=/app/bin:${PATH}
-
 ENTRYPOINT ["libeufin-nexus"]
 CMD ["serve"]

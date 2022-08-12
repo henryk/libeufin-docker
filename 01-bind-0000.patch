@@ -15,3 +15,20 @@ index 4f1abc81..099baaff 100644
              }
              module(nexusApp)
          }
+diff --git a/sandbox/src/main/kotlin/tech/libeufin/sandbox/Main.kt b/sandbox/src/main/kotlin/tech/libeufin/sandbox/Main.kt
+index 16a3ccdc..eb428f97 100644
+--- a/sandbox/src/main/kotlin/tech/libeufin/sandbox/Main.kt
++++ b/sandbox/src/main/kotlin/tech/libeufin/sandbox/Main.kt
+@@ -1606,11 +1606,7 @@ fun serverMain(port: Int) {
+         environment = applicationEngineEnvironment{
+             connector {
+                 this.port = port
+-                this.host = "127.0.0.1"
+-            }
+-            connector {
+-                this.port = port
+-                this.host = "[::1]"
++                this.host = "0.0.0.0"
+             }
+             module(sandboxApp)
+         },
