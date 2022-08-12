@@ -44,6 +44,9 @@ services:
     environment:
       LIBEUFIN_SANDBOX_DB_CONNECTION: "jdbc:postgresql://db-sandbox:5432/eufin_sandbox?user=eufin_sandbox&password=eufin_sandbox"
       LIBEUFIN_SANDBOX_ADMIN_PASSWORD: hunter2
+      LIBEUFIN_SANDBOX_USERNAME: admin
+      LIBEUFIN_SANDBOX_PASSWORD: hunter2
+      LIBEUFIN_SANDBOX_URL: http://sandbox:5002
     ports:
       - "5002:5002"
     networks:

@@ -27,4 +27,11 @@ services:
   sandbox:
     environment:
       LIBEUFIN_SANDBOX_ADMIN_PASSWORD: b4tterpassw0rd
+      LIBEUFIN_SANDBOX_PASSWORD: b4tterpassw0rd
+````
+
+To run `libeufin-cli` commands in the sandbox
+
+````shell
+docker compose run --rm sandbox libeufin-cli ...
 ````
