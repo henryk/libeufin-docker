@@ -28,7 +28,9 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_VERSION=$(echo $IMAGE_VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
           [ "$IMAGE_VERSION" == "main" ] && IMAGE_VERSION=latest
-          export IMAGE_VERSION
           echo IMAGE_VERSION=$IMAGE_VERSION
+          grep -v IMAGE_VERSION < .env > .env.tmp
+          echo IMAGE_VERSION=$IMAGE_VERSION >> .env.tmp
+          mv .env.tmp .env
           IMAGE_VERSION="${IMAGE_VERSION}" docker compose build
           IMAGE_VERSION="${IMAGE_VERSION}" docker compose push
