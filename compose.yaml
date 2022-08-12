@@ -1,0 +1,44 @@
+x-db-default: &db-default
+  image: postgres:14-alpine
+  restart: always
+  read_only: true
+  tmpfs:
+    - /tmp
+    - /var/run/postgresql
+
+services:
+  nexus:
+    image: nexus:latest
+    build:
+      context: .
+      target: nexus
+    restart: always
+    read_only: true
+    environment:
+      LIBEUFIN_NEXUS_DB_CONNECTION: "jdbc:postgresql://db-nexus:5432/eufin_nexus?user=eufin_nexus&password=eufin_nexus"
+    ports:
+      - "5001:5001"
+    networks:
+      db-nexus: {}
+      default: {}
+    depends_on:
+      - db-nexus
+
+  db-nexus:
+    <<: *db-default
+    volumes:
+      - db-nexus_data:/var/lib/postgresql/data
+    networks:
+      db-nexus: {}
+    environment:
+      POSTGRES_USER: eufin_nexus
+      POSTGRES_PASSWORD: eufin_nexus
+
+networks:
+  db-nexus:
+    internal: true
+    driver: bridge
+  default:
+
+volumes:
+  db-nexus_data:
