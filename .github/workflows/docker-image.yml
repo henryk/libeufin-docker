@@ -29,8 +29,7 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$IMAGE_VERSION" == "main" ] && IMAGE_VERSION=latest
           echo IMAGE_VERSION=$IMAGE_VERSION
-          grep -v IMAGE_VERSION < .env > .env.tmp
-          echo IMAGE_VERSION=$IMAGE_VERSION >> .env.tmp
-          mv .env.tmp .env
-          IMAGE_VERSION="${IMAGE_VERSION}" docker compose build
-          IMAGE_VERSION="${IMAGE_VERSION}" docker compose push
+          cp .env .env.local
+          echo IMAGE_VERSION=$IMAGE_VERSION >> .env.local
+          IMAGE_VERSION="${IMAGE_VERSION}" docker compose --env-file .env.local build
+          IMAGE_VERSION="${IMAGE_VERSION}" docker compose --env-file .env.local push

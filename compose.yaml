@@ -17,7 +17,7 @@ services:
     environment:
       LIBEUFIN_NEXUS_DB_CONNECTION: "jdbc:postgresql://db-nexus:5432/eufin_nexus?user=eufin_nexus&password=eufin_nexus"
     ports:
-      - "5001:5001"
+      - "${NEXUS_PORT}:5001"
     networks:
       db-nexus: {}
       default: {}
@@ -48,7 +48,7 @@ services:
       LIBEUFIN_SANDBOX_PASSWORD: hunter2
       LIBEUFIN_SANDBOX_URL: http://sandbox:5002
     ports:
-      - "5002:5002"
+      - "${SANDBOX_PORT}:5002"
     networks:
       db-sandbox: {}
       default: {}
