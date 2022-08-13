@@ -52,8 +52,9 @@ ENTRYPOINT ["/sandbox-entrypoint.sh"]
 CMD ["serve", "--port", "5002"]
 
 FROM common-base as nexus
+COPY nexus-entrypoint.sh /
 COPY --from=builder-nexus /app /app
 
 EXPOSE 5001
-ENTRYPOINT ["libeufin-nexus"]
-CMD ["serve"]
+ENTRYPOINT ["/nexus-entrypoint.sh"]
+CMD ["serve", "--port", "5001"]

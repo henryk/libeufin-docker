@@ -35,3 +35,12 @@ To run `libeufin-cli` commands in the sandbox
 ````shell
 docker compose run --rm sandbox libeufin-cli ...
 ````
+
+To run a shell in the sandbox or nexus
+
+````shell
+docker compose run --rm sandbox sh
+````
+
+(`nexus` instead of `sandbox` works too, as does `bash` instead of `sh`)
+
